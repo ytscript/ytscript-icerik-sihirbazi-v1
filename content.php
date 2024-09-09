@@ -127,7 +127,7 @@ $openai_api_key = get_option('apideger');
                         <h2>Başlıklardan Makale Oluştur</h2>
                         <div style="font-size:medium; font-width:bold;"></div>
                         <div class="form">
-                            <form method="post">
+                            <form method="post" id="formgizle">
                                 <div class="alan">
                                     <div class="label2" for="dil">
                                         <b>Seçilen Başlıklar:</b><br>
@@ -143,7 +143,7 @@ $openai_api_key = get_option('apideger');
                             </form>
                             <div class="alan">
                                 <div class="makaleler">
-                                    <div class="newPost">
+                                    <div id="editor" hidden class="newPost">
                                         <h3 id="editorMakaleSayi"></h3>
                                         <input type="text" id="editorMakaleBaslk" placeholder="Enter title here">
                                         <div class="toolbar">
@@ -256,10 +256,12 @@ $openai_api_key = get_option('apideger');
         const tab2 = document.getElementById('tab2');
         const basliktanuret = document.getElementById('basliktanuret');
 
+
         if (makaleleriUretButton && tab2) {
             // "Başlıklarla Makaleler Üret" butonuna tıklama olayı ekleyelim
             makaleleriUretButton.addEventListener('click', function() {
                 // Butona tıklandığında 2. sekmeye geçişi sağlayalım
+                formgizle.style.display = 'block';
                 tab2.click();
                 basliktanuret.removeAttribute("hidden");
                 CheckBoxUpdate();
@@ -433,12 +435,72 @@ $openai_api_key = get_option('apideger');
         }
     }
     async function ekleMakale(makalelerDiv, makale, index, baslik) {
+        const formgizle = document.getElementById("formgizle");
+        formgizle.style.display = 'none';
         const icerikAlani = document.getElementById("editoralani");
         const editorMakaleBaslk = document.getElementById("editorMakaleBaslk");
         const editorMakaleSayi = document.getElementById("editorMakaleSayi");
         editorMakaleBaslk.value = `${baslik}`;
         icerikAlani.innerHTML = `${makale}`;
         editorMakaleSayi.innerHTML = `<b>Makale ${index + 1}`;
+        const yeniEditorDiv = document.createElement('div');
+        yeniEditorDiv.innerHTML = `
+        <div class="newPost">
+            <h3 id="editorMakaleSayi">Makale ${index + 1}</h3>
+            <input type="text" id="editorMakaleBaslk" placeholder="Enter title here" value="${baslik}">
+            <div class="toolbar">
+                <button type="button" data-func="bold"><i class="fa fa-bold"></i></button>
+                <button type="button" data-func="italic"><i class="fa fa-italic"></i></button>
+                <button type="button" data-func="underline"><i class="fa fa-underline"></i></button>
+                <button type="button" data-func="justifyleft"><i class="fa fa-align-left"></i></button>
+                <button type="button" data-func="justifycenter"><i class="fa fa-align-center"></i></button>
+                <button type="button" data-func="justifyright"><i class="fa fa-align-right"></i></button>
+                <button type="button" data-func="insertunorderedlist"><i class="fa fa-list-ul"></i></button>
+                <button type="button" data-func="insertorderedlist"><i class="fa fa-list-ol"></i></button>
+                <div class="customSelect">
+                    <select data-func="fontname">
+                        <optgroup label="Serif Fonts">
+                            <option value="Bree Serif">Bree Serif</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Palatino Linotype">Palatino Linotype</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                        </optgroup>
+                        <optgroup label="Sans Serif Fonts">
+                            <option value="Arial">Arial</option>
+                            <option value="Arial Black">Arial Black</option>
+                            <option value="Asap" selected>Asap</option>
+                            <option value="Comic Sans MS">Comic Sans MS</option>
+                            <option value="Impact">Impact</option>
+                            <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                            <option value="Tahoma">Tahoma</option>
+                            <option value="Trebuchet MS">Trebuchet MS</option>
+                            <option value="Verdana">Verdana</option>
+                        </optgroup>
+                        <optgroup label="Monospace Fonts">
+                            <option value="Courier New">Courier New</option>
+                            <option value="Lucida Console">Lucida Console</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="customSelect">
+                    <select data-func="formatblock">
+                        <option value="h1">Heading 1</option>
+                        <option value="h2">Heading 2</option>
+                        <option value="h4">Subtitle</option>
+                        <option value="p" selected>Paragraph</option>
+                    </select>
+                </div>
+            </div>
+            <div class="editor" id="editoralani" contenteditable>${makale}</div>
+            <div class="buttons">
+                <button data-func="clear" type="button">clear</button>
+                <button data-func="save" type="button">save</button>
+            </div>
+        </div>
+    `;
+
+
+        makalelerDiv.appendChild(yeniEditorDiv);
     }
 
     async function makaleyiChatGPTUzerindenOlustur(baslik, apiKey) {
