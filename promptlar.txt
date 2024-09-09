@@ -1,0 +1,18 @@
+-------------------
+Meta oluşturucu:
+
+Sana vereceğim anahtar kelime ile meta title ve description oluştur:
+
+Tür: Blog Yazısı / Ürün (Product) / Web Site Sayfası -- [bu kısmı değiştirip kullanın]
+Anahtar Kelime: KELİME
+
+Meta Title Karakter Sayısı EN FAZLA 160
+Meta Description Karakter Sayısı 60
+
+Bir tablo oluştur ve iki sütun halinde ver: Meta Title ve Meta Description
+
+Türkçe dilinde yaz
+
+---------------------
+
+
