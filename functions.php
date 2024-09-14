@@ -9,71 +9,92 @@
  */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-if (isset($_POST['icerik_turu']) && isset($_POST['sektor']) && isset($_POST['baslik_adedi']) && isset($_POST['apikey'])) {
-    echo '<div class="wrap">';
-    echo '<h2>Oluşturulan başlıklar:</h2>';
-    $icerik_turu = $_POST['icerik_turu'];
-    $sektor = $_POST['sektor'];
-    $baslik_adedi = intval($_POST['baslik_adedi']);
-    $dil = $_POST['dil'];
-    $openai_api_key = $_POST['apikey'];
-    $basliklar = array();
-    $unique_titles = array();
-    $metin = "Content Type: $icerik_turu, Sector: $sektor, Title $baslik_adedi";
-    $olusturulan_baslik = openai_metin_ile_baslik_olustur($metin, $openai_api_key, $icerik_turu, $sektor, $dil, $baslik_adedi);
-    $olusturulan_baslik = str_replace('"', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace(':', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('!', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('.', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('Tıkla', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('Tıklayın', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('İncele', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('İnceleyin', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('Oku', '', $olusturulan_baslik);
-    $olusturulan_baslik = str_replace('Okuyun', '', $olusturulan_baslik);
-    $unique_title = ucfirst($olusturulan_baslik);
-    if (!in_array($unique_title, $unique_titles)) {
-        $unique_titles[] = $unique_title;
-        $basliklar[] = $unique_title;
-    }
-    echo '</div>';
-    $string = $basliklar[0];
-    $rows = explode("\n", $string);
-    foreach ($rows as $row) {
-        $parts = explode(
-            " ",
-            $row,
-            2
-        );
-        $number = $parts[0];
-        $title = $parts[1];
+    if (isset($_POST['icerik_turu']) && isset($_POST['sektor']) && isset($_POST['baslik_adedi']) && isset($_POST['apikey'])) {
+        if (isset($_POST['yeniYazi'])) {
+            $icerik_turu = $_POST['icerik_turu'];
+            $sektor = $_POST['sektor'];
+            $baslik_adedi = intval($_POST['baslik_adedi']);
+            $dil = $_POST['dil'];
+            $openai_api_key = $_POST['apikey'];
+            $metin = "Content Type: $icerik_turu, Sector: $sektor, Title $baslik_adedi";
+            $olusturulan_baslik = openai_metin_ile_baslik_olustur($metin, $openai_api_key, $icerik_turu, $sektor, $dil, $baslik_adedi);
+            $olusturulan_baslik = str_replace('"', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace(':', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('!', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('.', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Tıkla', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Tıklayın', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('İncele', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('İnceleyin', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Oku', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Okuyun', '', $olusturulan_baslik);
+            $unique_title = ucfirst($olusturulan_baslik);
+            echo $unique_title;
+        } else {
+            echo '<div class="wrap">';
+            echo '<h2>Oluşturulan başlıklar:</h2>';
+            $icerik_turu = $_POST['icerik_turu'];
+            $sektor = $_POST['sektor'];
+            $baslik_adedi = intval($_POST['baslik_adedi']);
+            $dil = $_POST['dil'];
+            $openai_api_key = $_POST['apikey'];
+            $basliklar = array();
+            $unique_titles = array();
+            $metin = "Content Type: $icerik_turu, Sector: $sektor, Title $baslik_adedi";
+            $olusturulan_baslik = openai_metin_ile_baslik_olustur($metin, $openai_api_key, $icerik_turu, $sektor, $dil, $baslik_adedi);
+            $olusturulan_baslik = str_replace('"', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace(':', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('!', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('.', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Tıkla', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Tıklayın', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('İncele', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('İnceleyin', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Oku', '', $olusturulan_baslik);
+            $olusturulan_baslik = str_replace('Okuyun', '', $olusturulan_baslik);
+            $unique_title = ucfirst($olusturulan_baslik);
+            if (!in_array($unique_title, $unique_titles)) {
+                $unique_titles[] = $unique_title;
+                $basliklar[] = $unique_title;
+            }
+            echo '</div>';
+            $string = $basliklar[0];
+            $rows = explode("\n", $string);
+            foreach ($rows as $row) {
+                $parts = explode(
+                    " ",
+                    $row,
+                    2
+                );
+                $number = $parts[0];
+                $title = $parts[1];
 
 ?>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <input onblur="CheckBoxUpdate()" type="checkbox" id="<?php echo $number; ?>check" class="baslik-checkbox form-control" aria-label="Checkbox for following text input">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input onblur="CheckBoxUpdate()" type="checkbox" id="<?php echo $number; ?>check" class="baslik-checkbox form-control" aria-label="Checkbox for following text input">
+                        </div>
+                    </div>
+                    <input type="text" id="<?php echo $number; ?>text" class=" form-control col-8" value="<?php echo $title ?>">
                 </div>
-            </div>
-            <input type="text" id="<?php echo $number; ?>text" class=" form-control col-8" value="<?php echo $title ?>">
-        </div>
-    <?php
-        $titles[] = $title;
-    }
+            <?php
+                $titles[] = $title;
+            }
 
-    ?>
+            ?>
 
-    <button type="button" onblur="CheckBoxUpdate()" class="btn btn-info col-4" id="selectAllButton">Tümünü Seç</button>
-    <button type="button" onclick="CheckBoxClear()" class="btn btn-danger col-4" id="clearAllCheck">Temizle</button>
+            <button type="button" onblur="CheckBoxUpdate()" class="btn btn-info col-4" id="selectAllButton">Tümünü Seç</button>
+            <button type="button" onclick="CheckBoxClear()" class="btn btn-danger col-4" id="clearAllCheck">Temizle</button>
 
-    <hr>
-    <button type="button" class="btn btn-primary btn-lg btn-block pulsating-button" id="makaleleriUretButton">Seçilen Başlıklarla Makaleler Üret</button>
+            <hr>
+            <button type="button" class="btn btn-primary btn-lg btn-block pulsating-button" id="makaleleriUretButton">Seçilen Başlıklarla Makaleler Üret</button>
 
 
 <?php
-}
-}
-else{
+        }
+    }
+} else {
 }
 function openai_metin_ile_baslik_olustur($metin, $api_key, $icerik_turu, $sektor, $dil, $baslik_adedi)
 {
